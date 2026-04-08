@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoNexus | IA & Global News</title>
+    <style>
+        :root {
+            --bg-dark: #050508;
+            --bg-card: #0d0d1a;
+            --text-main: #e0e0e0;
+            --primary-neon: #00f2fe;
+            --secondary-neon: #4facfe;
+            --paypal-gold: #ffc439;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+            background-color: var(--bg-dark); 
+            color: var(--text-main); 
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        /* HEADER RESPONSIVO */
+        header { 
+            background: rgba(5, 5, 8, 0.9); 
+            padding: 1rem 5%; 
+            position: fixed; 
+            width: 100%; 
+            top: 0; 
+            z-index: 1000; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            backdrop-filter: blur(15px); 
+            border-bottom: 1px solid rgba(0,242,254,0.1); 
+        }
+
+        .logo { 
+            font-size: 1.2rem; 
+            font-weight: 900; 
+            color: var(--primary-neon); 
+            text-shadow: 0 0 10px rgba(0,242,254,0.5);
+            letter-spacing: 2px;
+        }
+
+        .btn-donate {
+            background: var(--paypal-gold);
+            color: #111;
+            padding: 8px 16px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.75rem;
+            transition: 0.3s;
+        }
+
+        /* CONTENEDOR PRINCIPAL */
+        main { 
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 100px 20px 40px; 
+        }
+
+        .hero-title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .hero-title h1 {
+            font-size: clamp(1.5rem, 5vw, 2.5rem);
+            color: #fff;
+            margin-bottom: 10px;
+        }
+
+        /* GRID AUTO-AJUSTABLE */
+        .grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+            gap: 20px; 
+        }
+
+        /* TARJETAS */
+        .card { 
+            background: var(--bg-card); 
+            border-radius: 16px; 
+            border: 1px solid rgba(255,255,255,0.05); 
+            transition: 0.3s ease;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .card:hover { 
+            transform: translateY(-5px); 
+            border-color: var(--primary-neon);
+        }
+
+        .news-img { 
+            width: 100%; 
+            height: 160px; 
+            object-fit: cover;
+            background: #1a1a2e;
+        }
+
+        .card-content {
+            padding: 1.2rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .ia-tag {
+            font-size: 0.6rem;
+            color: var(--primary-neon);
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        h3 { 
+            font-size: 1rem; 
+            margin-bottom: 15px; 
+            color: #fff; 
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .btn-view { 
+            margin-top: auto;
+            display: block; 
+            padding: 10px; 
+            border-radius: 8px; 
+            font-weight: 700; 
+            font-size: 0.8rem;
+            text-align: center;
+            text-decoration: none;
+            border: 1px solid var(--primary-neon);
+            color: var(--primary-neon);
+            transition: 0.2s;
+        }
+
+        .btn-view:hover { 
+            background: var(--primary-neon); 
+            color: #000; 
+        }
+
+        footer { text-align: center; padding: 40px; color: #444; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">ECONEXUS</div>
+        <a href="https://www.paypal.com/paypalme/yeisontatis" target="_blank" class="btn-donate">APOYAR</a>
+    </header>
+
+    <main>
+        <div class="hero-title">
+            <h1>Monitor de Sostenibilidad</h1>
+            <p style="color: #888;">Noticias globales filtradas por IA</p>
+        </div>
+        
+        <div id="news-container" class="grid">
+            </div>
+    </main>
+
+    <footer>&copy; 2026 EcoNexus - IA System</footer>
+
+    <script>
+        const API_KEY = 'b2b4310690724f4c9b2e9990ecc1b4f4'; 
+        const container = document.getElementById('news-container');
+
+        async function cargarNoticias() {
+            container.innerHTML = "<p style='grid-column: 1/-1; text-align:center;'>Conectando con satélites...</p>";
+            
+            try {
+                const response = await fetch(`https://gnews.io/api/v4/search?q=tecnologia+sostenibilidad&lang=es&max=12&apikey=${API_KEY}`);
+                
+                if (!response.ok) throw new Error("Error API");
+
+                const data = await response.json();
+
+                if (data.articles && data.articles.length > 0) {
+                    renderizar(data.articles);
+                } else {
+                    renderizarOffline("No hay noticias hoy, mostrando archivo.");
+                }
+            } catch (e) {
+                renderizarOffline("Error de conexión, cargando modo local.");
+            }
+        }
+
+        function renderizar(articulos) {
+            container.innerHTML = articulos.map(art => `
+                <div class="card">
+                    <img src="${art.image}" class="news-img" onerror="this.src='https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=500'">
+                    <div class="card-content">
+                        <span class="ia-tag">Análisis IA: 98% Relevante</span>
+                        <h3>${art.title}</h3>
+                        <a href="${art.url}" target="_blank" class="btn-view">LEER AHORA</a>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderizarOffline(msg) {
+            console.log(msg);
+            const demos = [
+                {title: "IA reduce el consumo eléctrico en un 40% en Europa", image: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=500", url: "#"},
+                {title: "Nuevos paneles solares funcionan incluso de noche", image: "https://images.unsplash.com/photo-1509391366360-2e959784a276?w=500", url: "#"},
+                {title: "Baterías de grafeno: carga completa en 2 minutos", image: "https://images.unsplash.com/photo-1593941707882-a5bba14938c7?w=500", url: "#"}
+            ];
+            renderizar(demos);
+        }
+
+        cargarNoticias();
+    </script>
+</body>
+</html>
