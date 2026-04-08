@@ -3,165 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EcoNexus | IA Monitoring</title>
+    <title>EcoNexus | IA News & Monitoring</title>
     <style>
         :root {
             --bg: #030305;
             --card: #0a0a12;
             --neon: #00f2fe;
-            --gold: #ffc439;
             --text: #e0e0e0;
+            --paypal-gold: #ffc439; /* Color oficial de PayPal */
         }
-
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
-
-        header { 
-            padding: 1.2rem 5%; background: rgba(3,3,5,0.9); position: fixed; width: 100%; top: 0; 
-            z-index: 1000; border-bottom: 1px solid rgba(0,242,254,0.1); backdrop-filter: blur(10px);
-            display: flex; justify-content: space-between; align-items: center;
-        }
-
-        .logo { font-size: 1.5rem; font-weight: 900; color: var(--neon); text-shadow: 0 0 10px var(--neon); }
-
-        main { max-width: 1200px; margin: 0 auto; padding: 120px 20px 60px; }
-
-        .search-area { display: flex; justify-content: center; gap: 10px; margin-bottom: 50px; }
-        input { 
-            width: 100%; max-width: 400px; padding: 12px 20px; border-radius: 50px; 
-            border: 1px solid var(--neon); background: rgba(255,255,255,0.05); color: #fff; outline: none;
-        }
-        button { 
-            padding: 12px 25px; border-radius: 50px; border: none; background: var(--neon); 
-            color: #000; font-weight: bold; cursor: pointer; transition: 0.3s;
-        }
-        button:hover { transform: scale(1.05); box-shadow: 0 0 15px var(--neon); }
-
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
-
-        .card { 
-            background: var(--card); border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); 
-            overflow: hidden; display: flex; flex-direction: column; height: 100%; transition: 0.4s;
-        }
-        .card:hover { transform: translateY(-8px); border-color: var(--neon); }
-
-        .news-img { width: 100%; height: 180px; object-fit: cover; background: #1a1a2e; }
-        .card-body { padding: 1.5rem; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); }
         
-        .tag { font-size: 0.65rem; font-weight: bold; text-transform: uppercase; margin-bottom: 10px; display: inline-block; }
-        .tag-online { color: var(--neon); }
-        .tag-off { color: var(--gold); }
-
-        .btn-link { 
-            display: block; padding: 10px; border-radius: 10px; text-align: center; text-decoration: none; 
-            border: 1px solid var(--neon); color: var(--neon); font-weight: bold; margin-top: 15px;
+        /* HEADER CON BOTÓN DE PAYPAL */
+        header { 
+            padding: 1.2rem 5%; 
+            background: rgba(3,3,5,0.9); 
+            border-bottom: 1px solid rgba(0,242,254,0.1); 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            position: sticky; 
+            top: 0; 
+            z-index: 100; 
+            backdrop-filter: blur(10px); 
         }
-        .btn-off { border-color: var(--gold); color: var(--gold); }
+        .logo { font-size: 1.5rem; font-weight: 900; color: var(--neon); text-shadow: 0 0 10px var(--neon); }
+        
+        .donate-btn {
+            background: var(--paypal-gold);
+            color: #003087; /* Azul PayPal */
+            padding: 8px 16px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 0.8rem;
+            transition: 0.3s;
+            border: 2px solid transparent;
+        }
+        .donate-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px var(--paypal-gold);
+        }
+
+        main { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+        .search-area { display: flex; justify-content: center; gap: 10px; margin-bottom: 50px; }
+        input { width: 100%; max-width: 400px; padding: 12px 20px; border-radius: 50px; border: 1px solid var(--neon); background: rgba(255,255,255,0.05); color: #fff; outline: none; }
+        button#run { padding: 12px 25px; border-radius: 50px; border: none; background: var(--neon); color: #000; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
+        .card { background: var(--card); border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); overflow: hidden; display: flex; flex-direction: column; transition: 0.4s; }
+        .card:hover { transform: translateY(-8px); border-color: var(--neon); }
+        .news-img { width: 100%; height: 180px; object-fit: cover; }
+        .card-body { padding: 1.5rem; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+        .btn-link { display: block; padding: 10px; border-radius: 10px; text-align: center; text-decoration: none; border: 1px solid var(--neon); color: var(--neon); font-weight: bold; margin-top: 15px; }
     </style>
 </head>
 <body>
 
     <header>
         <div class="logo">ECONEXUS</div>
-        <div id="api-status" style="font-size: 0.7rem; color: #555;">SISTEMA ACTIVO</div>
+        <a href="https://www.paypal.com/paypalme/yeisontatis" target="_blank" class="donate-btn">APOYAR PROYECTO</a>
     </header>
 
     <main>
         <div class="search-area">
-            <input type="text" id="query" placeholder="Buscar: IA, Clima, Marte...">
+            <input type="text" id="query" placeholder="Buscar: Tecnología, Clima, IA...">
             <button id="run">EXPLORAR</button>
         </div>
         <div id="board" class="grid"></div>
     </main>
 
     <script>
-        const KEY = '184664c6d372c67583d1063f58f203a1';
+        const KEY = 'b2b4310690724f4c9b2e9990ecc1b4f4';
         const board = document.getElementById('board');
-        const apiStatus = document.getElementById('api-status');
 
-        async function engine(q = 'tecnología') {
-            board.innerHTML = "<p style='grid-column:1/-1; text-align:center;'>Consultando nodos...</p>";
+        async function engine(q = 'tecnología sostenibilidad') {
+            board.innerHTML = "<p style='grid-column:1/-1; text-align:center;'>Consultando base de datos...</p>";
             
             try {
                 const res = await fetch(`https://gnews.io/api/v4/search?q=${encodeURIComponent(q)}&lang=es&max=6&apikey=${KEY}`);
-                
-                if (!res.ok) throw new Error("API_LIMIT");
-
+                if (!res.ok) throw new Error("API_ERROR");
                 const data = await res.json();
-                apiStatus.innerText = "CONEXIÓN ESTABLE";
-                apiStatus.style.color = "var(--neon)";
-                draw(data.articles, false);
-
+                if (data.articles.length === 0) throw new Error("NO_DATA");
+                draw(data.articles);
             } catch (err) {
-                console.warn("API Offline - Activando Respaldo");
-                apiStatus.innerText = "MODO RESPALDO ACTIVO";
-                apiStatus.style.color = "var(--gold)";
-                drawFallback(q);
+                drawAlternativo(q);
             }
         }
 
-        function draw(items, isBackup) {
+        function draw(items) {
             board.innerHTML = items.map(n => `
                 <div class="card">
                     <img src="${n.image || 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=500'}" class="news-img">
                     <div class="card-body">
-                        <div>
-                            <span class="tag ${isBackup ? 'tag-off' : 'tag-online'}">
-                                ${isBackup ? 'Proyección IA' : 'Live Feed'}
-                            </span>
-                            <h3 style="font-size:1rem; margin-bottom:10px;">${n.title}</h3>
-                        </div>
-                        <a href="${n.url}" target="_blank" class="btn-link ${isBackup ? 'btn-off' : ''}">
-                            ${isBackup ? 'VER ANÁLISIS' : 'VER NOTICIA'}
-                        </a>
+                        <h3 style="font-size:1rem; margin-bottom:10px;">${n.title}</h3>
+                        <a href="${n.url}" target="_blank" class="btn-link">LEER NOTICIA</a>
                     </div>
                 </div>
             `).join('');
         }
 
-       function renderizarSimuladas(tema, status) {
-    // Noticias reales fijas para que los enlaces SI funcionen
-    const noticiasFalsas = [
-        {
-            title: `Exploración avanzada: El impacto de "${tema}" en la ciencia actual`,
-            url: "https://www.wired.com", 
-            img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800"
-        },
-        {
-            title: `Reporte Especial: ¿Es "${tema}" la clave para el desarrollo sostenible?`,
-            url: "https://www.technologyreview.es",
-            img: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=800"
-        },
-        {
-            title: `Nuevos horizontes en "${tema}": Lo que nos depara el 2026`,
-            url: "https://www.nationalgeographic.es/ciencia",
-            img: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=800"
-        }
-    ];
+        function drawAlternativo(q) {
+            const googleNewsUrl = `https://news.google.com/search?q=${encodeURIComponent(q)}&hl=es-419&gl=CO&ceid=CO:es-419`;
+            const temas = [
+                { t: `Reporte Global: ${q}`, img: "https://images.unsplash.com/photo-1504711432869-0fd10b483220?w=500" },
+                { t: `Tendencias de ${q} 2026`, img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=500" },
+                { t: `Impacto en tiempo real: ${q}`, img: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=500" }
+            ];
 
-    container.innerHTML = `
-        <p style="grid-column: 1/-1; text-align:center; color: var(--primary-neon); margin-bottom: 20px; font-size: 0.9rem; letter-spacing: 1px;">
-            📡 ANALIZANDO NODOS: Mostrando reportes globales para "${tema}"
-        </p>
-    ` + noticiasFalsas.map(n => `
-        <article class="card">
-            <img src="${n.img}" class="news-img">
-            <div class="card-content">
-                <div>
-                    <span class="ia-tag">REPORTE IA</span>
-                    <h3>${n.title}</h3>
-                </div>
-                <a href="${n.url}" target="_blank" class="btn-view">LEER ARTÍCULO</a>
-            </div>
-        </article>
-    `).join('');
-}
-        }
-
-        document.getElementById('run').onclick = () => engine(document.getElementById('query').value);
-        document.getElementById('query').onkeypress = (e) => { if(e.key === 'Enter') engine(e.target.value); };
-
-        window.onload = () => engine();
-    </script>
-</body>
-</html>
+            board.innerHTML = `
+                <p style="grid-column: 1/-1; text-align:center; color: var(--paypal-gold); margin
