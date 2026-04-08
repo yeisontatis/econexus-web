@@ -3,310 +3,135 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EcoNexus | IA News & Monitoring</title>
+    <title>EcoNexus | IA Monitoring</title>
     <style>
         :root {
-            --bg-dark: #030305;
-            --bg-card: #0a0a12;
-            --text-main: #e0e0e0;
-            --primary-neon: #00f2fe;
-            --secondary-neon: #4facfe;
-            --warning-gold: #ffc439;
-            --ai-glow: rgba(0, 242, 254, 0.15);
+            --bg: #030305;
+            --card: #0a0a12;
+            --neon: #00f2fe;
+            --gold: #ffc439;
+            --text: #e0e0e0;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            font-family: 'Inter', 'Segoe UI', sans-serif; 
-            background-color: var(--bg-dark); 
-            color: var(--text-main); 
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
 
-        /* HEADER */
         header { 
-            background: rgba(3, 3, 5, 0.9); 
-            padding: 0.8rem 5%; 
-            position: fixed; 
-            width: 100%; 
-            top: 0; 
-            z-index: 1000; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            backdrop-filter: blur(20px); 
-            border-bottom: 1px solid rgba(0,242,254,0.15); 
+            padding: 1.2rem 5%; background: rgba(3,3,5,0.9); position: fixed; width: 100%; top: 0; 
+            z-index: 1000; border-bottom: 1px solid rgba(0,242,254,0.1); backdrop-filter: blur(10px);
+            display: flex; justify-content: space-between; align-items: center;
         }
 
-        .logo { 
-            font-size: 1.4rem; 
-            font-weight: 900; 
-            color: var(--primary-neon); 
-            text-shadow: 0 0 10px var(--primary-neon);
-            letter-spacing: 1px;
-        }
+        .logo { font-size: 1.5rem; font-weight: 900; color: var(--neon); text-shadow: 0 0 10px var(--neon); }
 
-        /* MAIN CONTENT */
-        main { 
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 120px 20px 60px; 
-        }
+        main { max-width: 1200px; margin: 0 auto; padding: 120px 20px 60px; }
 
-        .hero {
-            text-align: center;
-            margin-bottom: 40px;
+        .search-area { display: flex; justify-content: center; gap: 10px; margin-bottom: 50px; }
+        input { 
+            width: 100%; max-width: 400px; padding: 12px 20px; border-radius: 50px; 
+            border: 1px solid var(--neon); background: rgba(255,255,255,0.05); color: #fff; outline: none;
         }
-
-        .hero h1 {
-            font-size: clamp(2rem, 5vw, 3rem);
-            margin-bottom: 10px;
-            background: linear-gradient(to right, #fff, var(--primary-neon));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        button { 
+            padding: 12px 25px; border-radius: 50px; border: none; background: var(--neon); 
+            color: #000; font-weight: bold; cursor: pointer; transition: 0.3s;
         }
+        button:hover { transform: scale(1.05); box-shadow: 0 0 15px var(--neon); }
 
-        /* SEARCH BAR */
-        .search-box {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 50px;
-        }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
 
-        #search-input {
-            width: 100%;
-            max-width: 450px;
-            padding: 14px 25px;
-            border-radius: 50px;
-            border: 1px solid rgba(0, 242, 254, 0.3);
-            background: rgba(255, 255, 255, 0.05);
-            color: #fff;
-            outline: none;
-            transition: 0.3s;
-        }
-
-        #search-input:focus {
-            border-color: var(--primary-neon);
-            box-shadow: 0 0 15px var(--ai-glow);
-        }
-
-        #search-btn {
-            padding: 14px 30px;
-            border-radius: 50px;
-            border: none;
-            background: var(--primary-neon);
-            color: #030305;
-            font-weight: 900;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        #search-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 20px var(--primary-neon);
-        }
-
-        /* GRID */
-        .grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
-            gap: 25px; 
-        }
-
-        /* CARDS */
         .card { 
-            background: var(--bg-card); 
-            border-radius: 20px; 
-            border: 1px solid rgba(255,255,255,0.03); 
-            transition: all 0.4s ease;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            height: 100%;
+            background: var(--card); border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); 
+            overflow: hidden; display: flex; flex-direction: column; height: 100%; transition: 0.4s;
         }
+        .card:hover { transform: translateY(-8px); border-color: var(--neon); }
 
-        .card:hover { 
-            transform: translateY(-10px); 
-            border-color: var(--primary-neon);
-            box-shadow: 0 10px 30px var(--ai-glow);
+        .news-img { width: 100%; height: 180px; object-fit: cover; background: #1a1a2e; }
+        .card-body { padding: 1.5rem; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+        
+        .tag { font-size: 0.65rem; font-weight: bold; text-transform: uppercase; margin-bottom: 10px; display: inline-block; }
+        .tag-online { color: var(--neon); }
+        .tag-off { color: var(--gold); }
+
+        .btn-link { 
+            display: block; padding: 10px; border-radius: 10px; text-align: center; text-decoration: none; 
+            border: 1px solid var(--neon); color: var(--neon); font-weight: bold; margin-top: 15px;
         }
-
-        .news-img { 
-            width: 100%; 
-            height: 200px; 
-            object-fit: cover; 
-            background: #1a1a2e;
-        }
-
-        .card-content {
-            padding: 1.5rem;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .ia-tag {
-            font-size: 0.7rem;
-            color: var(--primary-neon);
-            text-transform: uppercase;
-            font-weight: bold;
-            margin-bottom: 10px;
-            display: block;
-        }
-
-        h3 { font-size: 1.1rem; margin-bottom: 15px; color: #fff; line-height: 1.4; }
-
-        .btn-view { 
-            display: block; 
-            padding: 12px; 
-            border-radius: 12px; 
-            font-weight: 700; 
-            font-size: 0.85rem;
-            text-align: center;
-            text-decoration: none;
-            border: 1px solid var(--primary-neon);
-            color: var(--primary-neon);
-            transition: 0.3s;
-        }
-
-        .btn-view:hover { 
-            background: var(--primary-neon); 
-            color: #000; 
-        }
-
-        footer { 
-            text-align: center; 
-            padding: 50px; 
-            color: #444; 
-            border-top: 1px solid #111;
-            margin-top: 40px;
-        }
+        .btn-off { border-color: var(--gold); color: var(--gold); }
     </style>
 </head>
 <body>
 
     <header>
         <div class="logo">ECONEXUS</div>
-        <a href="https://www.paypal.com/paypalme/yeisontatis" target="_blank" style="text-decoration:none; color:var(--warning-gold); font-weight:bold; font-size:0.8rem;">DONAR</a>
+        <div id="api-status" style="font-size: 0.7rem; color: #555;">SISTEMA ACTIVO</div>
     </header>
 
     <main>
-        <div class="hero">
-            <h1>Eco-IA Monitoring</h1>
-            <p style="color: #888;">Buscador global de tecnología y sostenibilidad</p>
+        <div class="search-area">
+            <input type="text" id="query" placeholder="Buscar: IA, Clima, Marte...">
+            <button id="run">EXPLORAR</button>
         </div>
-
-        <div class="search-box">
-            <input type="text" id="search-input" placeholder="Busca un tema (ej: Robótica, Energía, Clima)...">
-            <button id="search-btn">BUSCAR</button>
-        </div>
-        
-        <div id="news-container" class="grid">
-            </div>
+        <div id="board" class="grid"></div>
     </main>
 
-    <footer>&copy; 2026 EcoNexus IA System | yeisontatis.github.io</footer>
-
     <script>
-        const API_KEY = 'b2b4310690724f4c9b2e9990ecc1b4f4'; 
-        const container = document.getElementById('news-container');
-        const searchInput = document.getElementById('search-input');
-        const searchBtn = document.getElementById('search-btn');
+        const KEY = 'b2b4310690724f4c9b2e9990ecc1b4f4';
+        const board = document.getElementById('board');
+        const apiStatus = document.getElementById('api-status');
 
-        async function cargarNoticias(query = 'tecnologia sostenibilidad') {
-            container.innerHTML = `<p style="grid-column: 1/-1; text-align:center; color: var(--primary-neon);">📡 Conectando con la red neuronal para: "${query}"...</p>`;
+        async function engine(q = 'tecnología') {
+            board.innerHTML = "<p style='grid-column:1/-1; text-align:center;'>Consultando nodos...</p>";
             
             try {
-                const url = `https://gnews.io/api/v4/search?q=${encodeURIComponent(query)}&lang=es&max=9&apikey=${API_KEY}`;
-                const response = await fetch(url);
+                const res = await fetch(`https://gnews.io/api/v4/search?q=${encodeURIComponent(q)}&lang=es&max=6&apikey=${KEY}`);
                 
-                // Si la API da error 401 (Unauthorized) o cualquier otro error
-                if (!response.ok) {
-                    throw new Error(`Status: ${response.status}`);
-                }
+                if (!res.ok) throw new Error("API_LIMIT");
 
-                const data = await response.json();
+                const data = await res.json();
+                apiStatus.innerText = "CONEXIÓN ESTABLE";
+                apiStatus.style.color = "var(--neon)";
+                draw(data.articles, false);
 
-                if (data.articles && data.articles.length > 0) {
-                    renderizar(data.articles, "Análisis en Vivo");
-                } else {
-                    renderizarSimuladas(query, "Sin resultados reales");
-                }
-
-            } catch (error) {
-                console.warn("⚠️ Fallo de API detectado. Activando Simulador EcoNexus.", error.message);
-                renderizarSimuladas(query, "Modo Simulación (API Off)");
+            } catch (err) {
+                console.warn("API Offline - Activando Respaldo");
+                apiStatus.innerText = "MODO RESPALDO ACTIVO";
+                apiStatus.style.color = "var(--gold)";
+                drawFallback(q);
             }
         }
 
-        function renderizar(articulos, tag) {
-            container.innerHTML = articulos.map(art => `
-                <article class="card">
-                    <img src="${art.image || 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800'}" class="news-img" onerror="this.src='https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800'">
-                    <div class="card-content">
+        function draw(items, isBackup) {
+            board.innerHTML = items.map(n => `
+                <div class="card">
+                    <img src="${n.image || 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=500'}" class="news-img">
+                    <div class="card-body">
                         <div>
-                            <span class="ia-tag">${tag}</span>
-                            <h3>${art.title}</h3>
+                            <span class="tag ${isBackup ? 'tag-off' : 'tag-online'}">
+                                ${isBackup ? 'Proyección IA' : 'Live Feed'}
+                            </span>
+                            <h3 style="font-size:1rem; margin-bottom:10px;">${n.title}</h3>
                         </div>
-                        <a href="${art.url}" target="_blank" class="btn-view">LEER REPORTE</a>
+                        <a href="${n.url}" target="_blank" class="btn-link ${isBackup ? 'btn-off' : ''}">
+                            ${isBackup ? 'VER ANÁLISIS' : 'VER NOTICIA'}
+                        </a>
                     </div>
-                </article>
+                </div>
             `).join('');
         }
 
-        function renderizarSimuladas(tema, status) {
-            // Generador de noticias ficticias para que la web nunca se vea rota
-            const noticiasFalsas = [
-                {
-                    title: `Inversión masiva en ${tema}: El futuro tecnológico del 2026`,
-                    img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800"
-                },
-                {
-                    title: `¿Cómo la Inteligencia Artificial está transformando "${tema}" hoy?`,
-                    img: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=800"
-                },
-                {
-                    title: `Nuevos protocolos de seguridad implementados en el sector de ${tema}`,
-                    img: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=800"
-                }
+        function drawFallback(q) {
+            const mocks = [
+                { title: `El impacto de ${q} en la economía global de 2026`, url: "#", image: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=500" },
+                { title: `Nuevos avances en ${q}: ¿Hacia dónde vamos?`, url: "#", image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=500" },
+                { title: `Sostenibilidad y ${q}: El dilema ético del mañana`, url: "#", image: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=500" }
             ];
-
-            container.innerHTML = `
-                <p style="grid-column: 1/-1; text-align:center; color: var(--warning-gold); margin-bottom: 20px; font-size: 0.8rem;">
-                    [AVISO: ${status}] Mostrando proyecciones inteligentes para su búsqueda.
-                </p>
-            ` + noticiasFalsas.map(n => `
-                <article class="card">
-                    <img src="${n.img}" class="news-img">
-                    <div class="card-content">
-                        <div>
-                            <span class="ia-tag" style="color:var(--warning-gold)">PROYECCIÓN IA</span>
-                            <h3>${n.title}</h3>
-                        </div>
-                        <a href="#" class="btn-view" style="border-color:var(--warning-gold); color:var(--warning-gold)">ACCESO LIMITADO</a>
-                    </div>
-                </article>
-            `).join('');
+            draw(mocks, true);
         }
 
-        // EVENTOS DE BÚSQUEDA
-        searchBtn.addEventListener('click', () => {
-            const query = searchInput.value.trim();
-            if(query) cargarNoticias(query);
-        });
+        document.getElementById('run').onclick = () => engine(document.getElementById('query').value);
+        document.getElementById('query').onkeypress = (e) => { if(e.key === 'Enter') engine(e.target.value); };
 
-        searchInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                const query = searchInput.value.trim();
-                if(query) cargarNoticias(query);
-            }
-        });
-
-        // INICIO
-        window.addEventListener('DOMContentLoaded', () => cargarNoticias());
+        window.onload = () => engine();
     </script>
 </body>
 </html>
